@@ -1,7 +1,3 @@
-# Web streaming example
-# Source code from the official PiCamera package
-# http://picamera.readthedocs.io/en/latest/recipes2.html#web-streaming
-
 import io
 import picamera
 import logging
@@ -12,10 +8,10 @@ from http import server
 PAGE="""\
 <html>
 <head>
-<title>Raspberry Pi - Surveillance Camera</title>
+<title>picamera MJPEG streaming demo</title>
 </head>
 <body>
-<center><img src="stream.mjpg" width="1920" height="1080"></center>
+<img src="stream.mjpg" width="640" height="480" />
 </body>
 </html>
 """
@@ -80,10 +76,8 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     allow_reuse_address = True
     daemon_threads = True
 
-with picamera.PiCamera(resolution='1920x1080', framerate=30) as camera:
+with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
     output = StreamingOutput()
-    #Uncomment the next line to change your Pi's Camera rotation (in degrees)
-    #camera.rotation = 90
     camera.start_recording(output, format='mjpeg')
     try:
         address = ('', 8000)
